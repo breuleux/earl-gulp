@@ -1,0 +1,54 @@
+
+provide:
+   task, transformer
+
+
+wrapTask{fn}{cb} =
+   match fn{}:
+      Promise? [chain p] ->
+         @then with {res} ->
+            wrapTask{-> res}{cb}
+         @catch with {e} ->
+            cb{e, null}
+      stream and {resume => Function?, pipe => Function?, on => Function?} ->
+         stream.resume{}
+         stream.on{.end} with -> cb{null, null}
+      res ->
+         cb{null, res}
+   null
+
+macro{wrapTask} task{arg} =
+   let {=> wrapTask} = @deps
+   let gulp = @mark{`gulp`}
+   helper{arg} where helper{match arg} =
+      `{^match, ^body}` ->
+         `^v < ^deps` ->
+            #symbol{name} = v
+            deplist = match deps:
+               #symbol{s} or #value{s} ->
+                  `{^=s}`
+               #data{*deps} ->
+                  #data{*[deps each #symbol{s} or #value{s} -> #value{s}]}
+            ```
+            splice:
+               var ^v = null
+               [^gulp].task{^=name, ^deplist, [^wrapTask]{async{{} -> ^v = ^body}}}
+            ```
+         v and #symbol{name} ->
+            ```
+            splice:
+               var ^v = null
+               [^gulp].task{^=name, [^wrapTask]{async{{} -> ^v = ^body}}}
+            ```
+      else ->
+         helper{`{^arg, pass}`}
+
+transformer{fn} =
+   async rval{file, enc, cb} =
+      try:
+         cb{null, await fn.call{this, file, enc}}
+      catch e:
+         print 'ERROR: {e.message}'
+         cb{null, null}
+   rval
+

@@ -1,4 +1,7 @@
 
+require:
+   through2 -> obj as thru
+
 provide:
    task, transformer
 
@@ -43,12 +46,12 @@ macro{wrapTask} task{arg} =
       else ->
          helper{`{^arg, pass}`}
 
-transformer{fn} =
+transformer{fn}{options} =
    async rval{file, enc, cb} =
       try:
          cb{null, await fn.call{this, file, enc}}
       catch e:
          print 'ERROR: {e.message}'
          cb{null, null}
-   rval
+   thru{rval.bind{options}}
 

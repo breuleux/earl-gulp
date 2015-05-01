@@ -4,7 +4,8 @@
   "description": "Earl Grey macros for gulp",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha"
+    "prepublish": "earl compile -5rvso lib/ src/",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,10 @@
   "homepage": "https://github.com/breuleux/earl-gulp",
   "dependencies": {
     "gulp": "^3.8.11",
-    "through2": "^0.6.3"
+    "through2": "^0.6.3",
+    "earlgrey-runtime": ">=0.0.7"
+  },
+  "devDependencies": {
+    "earlgrey": ">=0.0.2"
   }
 }

@@ -12,7 +12,8 @@
     "url": "https://github.com/breuleux/earl-gulp.git"
   },
   "keywords": [
-    "Earl Grey",
+    "earlgrey",
+    "earlgrey-macros",
     "macros",
     "gulp"
   ],
@@ -25,9 +26,9 @@
   "dependencies": {
     "gulp": "^3.8.11",
     "through2": "^0.6.3",
-    "earlgrey-runtime": ">=0.0.7"
+    "earlgrey-runtime": ">=0.0.11"
   },
   "devDependencies": {
-    "earlgrey": ">=0.0.2"
+    "earlgrey": ">=0.0.13"
   }
 }
